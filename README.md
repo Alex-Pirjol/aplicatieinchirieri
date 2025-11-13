@@ -206,3 +206,21 @@ docs/images/create_rental.png
 📄 Licență
 
 Proiect licențiat sub MIT License – liber pentru utilizare și adaptare.
+
+### Instalare rapidă
+
+```bash
+# Backend
+cd atv-rental-app/backend
+npm install
+cp .env.example .env # editează cu datele tale
+createdb atv_rental
+psql -d atv_rental -f db/schema.sql
+npm run dev
+
+# Frontend (alt terminal)
+cd atv-rental-app/frontend
+npm install
+cp .env.example .env # opțional, pentru configurarea API-ului
+npm run dev
+```

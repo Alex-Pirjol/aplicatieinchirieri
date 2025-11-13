@@ -1,47 +1,208 @@
-# aplicatieinchirieri
+🧭 Prezentare generală
 
-Aplicatie pentru inchirieri ATV.
+ATV Rental Manager ajută la gestionarea tuturor activităților legate de închirierea ATV-urilor:
 
-## Project Goals
-- Provide an end-to-end digital experience for booking ATV rentals in Romanian tourist destinations.
-- Reduce manual coordination by centralizing availability, pricing, and customer data.
-- Enable operators to manage fleets, schedules, and maintenance tasks efficiently.
-- Support secure online payments and transparent rental agreements for renters.
+✔ gestionarea clienților
+✔ administrarea ATV-urilor
+✔ generarea și urmărirea contractelor
+✔ înregistrarea plăților interne (NUMAI evidență internă, fără procesare online)
+✔ gestionarea incidentelor/daunelor
+✔ vizualizarea disponibilității ATV-urilor
+✔ generarea contractelor în format HTML (cu opțiune de export PDF)
 
-## Key Personas
-- **Renter (Tourist/Local Adventurer):** Wants to discover available ATVs, compare prices, and book a rental quickly from a mobile device.
-- **Rental Administrator:** Manages the fleet inventory, approves bookings, tracks maintenance, and communicates with renters.
-- **Business Owner:** Monitors performance, oversees pricing strategies, and reviews financial metrics.
+Aplicația NU procesează plăți online, ci doar oferă posibilitatea de a înregistra manual sumele achitate de clienți (ex: cash sau POS offline).
 
-## High-Level Features
-- Searchable catalog of ATVs with availability calendars and detailed specifications.
-- Guided booking flow including identity verification, rental terms acknowledgment, and digital signatures.
-- Admin dashboard for fleet management, booking approvals, and maintenance scheduling.
-- Integrated messaging between renters and administrators for clarifications or support.
-- Secure payment processing with receipts and automated refund handling.
-- Mobile-responsive UI optimized for quick booking and check-in on-site.
+⭐ Funcționalități
+👉 Gestionarea clienților
 
-## Primary User Stories
+Adăugare / editare / ștergere clienți
 
-### Renter Flow
-1. As a renter, I want to browse available ATVs filtered by location, date, and price so I can find an option that fits my trip.
-2. As a renter, I want to complete the booking online, including uploading identification and signing the rental agreement, so I can confirm my reservation before arriving.
-3. As a renter, I want to receive notifications and reminders about my booking so I stay informed about pickup instructions and policies.
+Istoric închirieri pentru fiecare client
 
-### Admin Flow
-1. As an admin, I want to review incoming booking requests and approve or decline them based on availability and renter history.
-2. As an admin, I want to track maintenance schedules and flag ATVs as unavailable when service is required.
-3. As an admin, I want to manage pricing, promotions, and fleet details through a centralized dashboard.
+👉 Gestionarea ATV-urilor
 
-### Payment Flow
-1. As a renter, I want to pay securely using credit/debit cards or digital wallets so that my booking is confirmed instantly.
-2. As a renter, I want to see a detailed breakdown of charges, deposits, and taxes before I finalize payment.
-3. As an admin, I want to process refunds or adjustments and keep an audit trail of all transactions.
+Introducerea unui ATV nou
 
-## Technical Constraints
-- Must run on shared hosting environments without requiring container orchestration.
-- Application should support responsive layouts for mobile, tablet, and desktop devices.
-- Payment integration must comply with PCI-DSS guidelines and support 3-D Secure where applicable.
-- Localization support for Romanian language by default with extensibility for additional languages.
-- Data storage must rely on a relational database compatible with common managed services (e.g., MySQL, PostgreSQL).
-- System should expose APIs that can integrate with third-party booking aggregators.
+Status în timp real
+
+Tarife configurabile
+
+👉 Gestionarea contractelor
+
+Creare contract cu selectarea clientului și ATV-ului
+
+Verificări automate pentru suprapuneri
+
+Calcul preț estimat
+
+Status contract: activ / încheiat / anulat
+
+👉 Evidență plăți interne (nu plăți online)
+
+Înregistrarea sumelor achitate în numerar / POS local
+
+Calcul „sumă totală vs sumă achitată”
+
+Evidență internă a restanțelor
+
+❗ Nu există integrare cu procesatori de plăți sau tranzacții online.
+
+👉 Incidente
+
+Adăugare incidente (daune)
+
+Cost estimat
+
+Link-uri către poze
+
+👉 Contracte HTML / PDF
+
+Template HTML
+
+Export PDF (prin soluții locale: Puppeteer / PDFKit)
+
+👉 Dashboard
+
+ATV-uri disponibile
+
+Contracte active
+
+Returnări astăzi
+
+Închirieri recente
+
+🏗️ Arhitectură
+atv-rental-app/
+│── backend/      → API REST (Node.js, Express, PostgreSQL)
+│── frontend/     → UI React
+└── README.md
+
+🛠 Tech Stack
+Backend:
+
+Node.js + Express
+
+PostgreSQL
+
+pg (sau Prisma/Sequelize)
+
+Frontend:
+
+React
+
+React Router
+
+Axios
+
+DevOps:
+
+GitHub Actions (CI)
+
+.env config
+
+🚀 Instalare
+1️⃣ Clonează proiectul
+git clone https://github.com/<username>/atv-rental-app.git
+cd atv-rental-app
+
+⚙️ Setup Backend
+cd backend
+npm install
+
+Creează .env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=parola
+DB_NAME=atv_rental
+PORT=4000
+
+Creează baza de date
+createdb atv_rental
+psql -d atv_rental -f db/schema.sql
+
+Rulează serverul
+npm run dev
+
+🎨 Setup Frontend
+cd frontend
+npm install
+npm run dev
+
+
+Frontend-ul rulează de obicei la:
+
+http://localhost:5173
+
+📁 Structură proiect
+atv-rental-app/
+├── backend/
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── services/
+│   │   ├── routes/
+│   │   ├── templates/
+│   │   ├── app.js
+│   │   ├── db.js
+│   │   └── server.js
+│   ├── db/schema.sql
+│   └── package.json
+│
+├── frontend/
+│   ├── src/
+│   │   ├── pages/
+│   │   ├── components/
+│   │   ├── services/
+│   │   └── App.jsx
+│   └── package.json
+│
+└── README.md
+
+🔌 Rute API (exemple)
+Clienți
+
+GET /api/clients
+
+POST /api/clients
+
+ATV-uri
+
+GET /api/atvs
+
+POST /api/atvs
+
+Contracte
+
+POST /api/rentals
+
+GET /api/rentals/:id
+
+Contract – Generare HTML
+
+GET /api/rentals/:id/contract-html
+
+🖼 Capturi ecran
+
+Poți adăuga aici imagini cu interfața aplicației:
+
+docs/images/dashboard.png
+docs/images/clients_page.png
+docs/images/create_rental.png
+
+📌 To Do / Roadmap
+
+ Autentificare + roluri (admin / operator)
+
+ Export PDF pentru contracte
+
+ Rapoarte avansate
+
+ Modul rezervări (programări viitoare)
+
+ Modul inventar consumabile (ulei, piese etc.)
+
+ Posibilitate atașare poze direct în aplicație
+
+📄 Licență
+
+Proiect licențiat sub MIT License – liber pentru utilizare și adaptare.
